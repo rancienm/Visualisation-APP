@@ -1,13 +1,19 @@
-#INstallation des packages
-
+##Installation des packages
+install.packages("devtools")
 
 install.packages("stringr")
 install.packages("plyr")
+install.packages("treemap")
 
 
-
+devtools::install_github("timelyportfolio/d3treeR")
+install.packages("d3treeR")
+require(devtools)
 library(plyr)
 library(stringr)
+library(treemap)
+library(d3treeR)
+
 
 
 
@@ -80,3 +86,80 @@ xfit<-seq(1,5,length=250)
 yfit<-dnorm(xfit,mean=mean(x),sd=sd(x))
 yfit <- yfit*diff(h$mids[1:2])*length(x)
 lines(xfit, yfit, col="black", lwd=1.6)
+
+#Treemap
+
+
+
+
+
+
+treemap(frequency_category,
+        index = "Category",
+        vSize = "freq",
+        type = "index"
+      
+        )
+
+
+
+d3tree(
+  # Brewer's Red-White-Grey palette reversed with predefined range
+  treemap(working_table,
+          index=c("Genres", "Size"),
+          vSize="Installs",
+          vColor="Rating",
+          type="value",
+          palette="-RdGy",
+          range=c(0,10000000000))
+  ,rootname = "Applications"
+)
+
+  
+d3tree(
+treemap(working_table,
+          index=c("Genres", "App"),
+          vSize="Installs",
+          vColor="Rating",
+          type="manual",
+          palette="-RdGy"),
+,rootname = "world")
+          
+
+
+
+
+
+
+
+?d3tree
+
+      
+
+
+
+working_table$Price[3]<- 0.5
+
+
+
+working_table <- subset(working_table,   working_table$Installs > 100000001)
+working_table <- unique(working_table$App)
+save <- working_table
+working_table$App <- as.character(working_table$App)
+working_table$Category <- as.character(working_table$Category)
+working_table$Rating <- as.numeric(working_table$Rating)
+
+
+working_table <- working_table[!duplicated(working_table$App),]
+
+
+
+
+
+
+liste <- unique(working_table$Category)
+
+
+  
+  
+working_table$Category[liste] <- working_table$Category[paste(" A -",liste,sep ="")]
